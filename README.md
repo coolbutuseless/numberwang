@@ -7,6 +7,7 @@
 
 ![](https://img.shields.io/badge/cool-useless-green.svg)
 ![](https://img.shields.io/badge/test%20coverage-100%25-blue.svg)
+[![R-CMD-check](https://github.com/coolbutuseless/numberwang/workflows/R-CMD-check/badge.svg)](https://github.com/coolbutuseless/numberwang/actions)
 <!-- badges: end -->
 
 `numberwang` will convert floating point numbers (and integers) to their
