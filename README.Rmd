@@ -1,0 +1,183 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = FALSE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+
+library(numberwang)
+```
+
+# numberwang   <img src="man/figures/logo.png" align="right" height="230/"/>
+
+<!-- badges: start -->
+![](https://img.shields.io/badge/cool-useless-green.svg)
+![](https://img.shields.io/badge/test coverage-100%25-blue.svg)
+<!-- badges: end -->
+
+`numberwang` will convert floating point numbers (and integers) to their 
+word representations, and vice versa.
+
+The key differentiator of this package, compared to 
+[{nombre}](https://cran.r-project.org/package=nombre), is that 
+it supports decimal representations by listing individual decimal digits.
+
+See below for a comparison with `{nombre}`, `{english}`, `{spanish}` and `{xfun}`.
+
+
+## What's in the box
+
+* `num_to_words(num, decimals = 3)` converts numeric vectors to character vectors 
+* `words_to_num(words)` converts character vectors to numeric vectors
+
+## Installation
+
+You can install from [GitHub](https://github.com/coolbutuseless/numberwang) with:
+
+``` r
+# install.package('remotes')
+remotes::install_github('coolbutuseless/numberwang')
+```
+
+## That's `numberwang`
+
+<img src="man/figures/thats-numberwang.jpg" />
+
+
+```{r}
+library(numberwang)
+
+c(12, pi, exp(10))
+
+num_to_words(c(12, pi, exp(10)))
+
+words_to_num(c(
+  'negative fifteen point seven',
+  "twenty-three point seven zero one",
+  "ten million, two thousand and forty two"
+))
+```
+
+
+
+## Limitations
+
+* Floating point representation isn't exact, which means that for very large
+numbers or very small numbers, and for lots of numbers inbetween,
+all the digits after the first few must often be taken with a grain of salt.
+* E.g. `formatC(0.3-0.2, format = 'f', digits = 20) = 0.09999999999999997780`
+* E.g. `1e25` should just be a `1` followed by zeros, but in floating point
+  representation we get: `formatC(1e25, format = 'f', digits = 0) = 10000000000000000905969664`
+* The `{english}` and `{nombre}` packages will warn you about precision loss 
+  like this,
+  but `{numberwang}` won't.
+
+
+## Feature comparison
+
+
+
+|                  | numberwang   | nombre                 | english   | spanish  | xfun    |
+|------------------|------------  |--------                |---------  |--------- |------   |
+| function         | num_to_words | nom_card               | english   | to_words | n2w     |
+| working range    | double()     | double()               | +/- 2^90  | [0,999]  |+/- 1e15 |
+| decimals         |  Yes         | as fractions           |   No      |   No     |  No     |
+| spanish          |      No      | No                     |  No       |  Yes     |   No    |
+| words-to-numbers | words_to_num | nom_uncard (ints only) | No        |  No      | No      |
+
+
+## Just for fun - Let's rotate the board!
+
+<img src="man/figures/lets-rotate-the-board.jpg" />
+
+
+```{r}
+exp(300)
+formatC(
+  exp(300), format = 'f', digits = 0
+)
+```
+
+
+```{r eval = FALSE}
+num_to_words(exp(300))
+```
+
+```{r echo = FALSE, comment = " "}
+cat(
+  strwrap(num_to_words(exp(300))),
+  sep = "\n"
+)
+```
+
+
+
+
+
+
+```{r eval = FALSE, echo = FALSE}
+library(grid)
+library(ingrid)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Parameters for a hex
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+r     <- 100
+theta <- seq(30, 360, 60) * pi/180 
+x     <- r * cos(theta)
+y     <- r * sin(theta)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# a hex polygon
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+hex <- polygon_grob(x, y, fill = 'black')
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Create an image maskeed by the hex
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+jpg <- jpeg::readJPEG("./man/figures/numberwang.jpg")
+image <- raster_grob(
+  image  = jpg, 
+  x      = .mm(-0),
+  y      = .mm(-0),
+  width  = .mm(2 * 1.65 * r), 
+  height = .mm(1 * 1.65 * r),
+  mask   = hex
+)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Draw the objects
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+grid::grid.newpage()
+grid::grid.draw(image)
+
+png("./man/figures/logo.png", type = 'cairo', width = 600, height = 600, bg = 'transparent')
+grid::grid.newpage()
+grid::grid.draw(hex)
+grid::grid.draw(image)
+invisible(dev.off())
+```
+
+
+
+
+## Related Software
+
+* [nombre](https://cran.r-project.org/package=nombre)
+* [english](https://cran.r-project.org/package=english)
+* [spanish](https://cran.r-project.org/package=spanish)
+* [xfun](https://cran.r-project.org/package=xfun)
+
+
+## Acknowledgements
+
+* R Core for developing and maintaining the language.
+* CRAN maintainers, for patiently shepherding packages onto CRAN and maintaining
+  the repository
