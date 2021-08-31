@@ -140,11 +140,7 @@ small_int_to_words <- function(num) {
     }
 
   } else if (x[2] == '1') {
-    if (x[3] == '0') {
-      bits <- c(bits, "ten")
-    } else {
       bits <- c(bits, teens[[x[3]]])
-    }
   } else {
     bits <- c(bits, ones[[x[3]]])
   }
